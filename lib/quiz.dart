@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:adv_basics/start_screen.dart';
 import 'package:adv_basics/question_screen.dart';
+import 'package:adv_basics/data/questions.dart';
+import 'package:adv_basics/result_screen.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -13,7 +15,8 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   // Widget? activeScreen;
-  var activeScreen = true;
+  var activeScreen = 'start-screen';
+  List<String> selectedAnswers = [];
 
   // @override
   // void initState() {
@@ -21,24 +24,41 @@ class _QuizState extends State<Quiz> {
   //   super.initState();
   // }
 
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        selectedAnswers = [];
+        activeScreen = 'result-screen';
+      });
+    }
+  }
+
   void switchScreen() {
     setState(() {
       // activeScreen = const QuestionScreen();
-      activeScreen = false;
+      activeScreen = 'question-screen';
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Widget screenWidget = StartScreen(switchScreen);
+    Widget screenWidget = StartScreen(switchScreen);
 
     // if (activeScreen) {
     //   screenWidget = StartScreen(switchScreen);
     // } else {
     //   screenWidget = const QuestionScreen();
     // }
-    final isStartScreen =
-        activeScreen ? StartScreen(switchScreen) : const QuestionScreen();
+    if (activeScreen == 'question-screen') {
+      screenWidget = QuestionScreen(
+        onSelectAnswer: chooseAnswer,
+      );
+    }
+
+    if (activeScreen == 'result-screen') {
+      screenWidget = const ResultScreen();
+    }
 
     return MaterialApp(
       home: Scaffold(
@@ -50,7 +70,7 @@ class _QuizState extends State<Quiz> {
               end: Alignment.bottomRight,
             ),
           ),
-          child: isStartScreen,
+          child: screenWidget,
         ),
       ),
     );
