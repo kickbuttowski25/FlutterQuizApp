@@ -9,7 +9,23 @@ class ResultScreen extends StatelessWidget {
   });
   final List<String> choosenAnswers;
 
-  List<Map<String, Object>> getSummaryData() {
+  // List<Map<String, Object>> getSummaryData() {
+  //   final List<Map<String, Object>> summary = [];
+  //   for (var i = 0; i < choosenAnswers.length; i++) {
+  //     summary.add(
+  //       {
+  //         'question_index': i,
+  //         'question': questions[i].question,
+  //         'correct_answer': questions[i].answers[0],
+  //         'user_answer': choosenAnswers[i],
+  //       },
+  //     );
+  //   }
+  //   return summary;
+  // }
+
+//Mark: getter function
+  List<Map<String, Object>> get summaryData {
     final List<Map<String, Object>> summary = [];
     for (var i = 0; i < choosenAnswers.length; i++) {
       summary.add(
@@ -26,11 +42,16 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final summaryData = getSummaryData();
+    // final summaryData = getSummaryData();
     final numTotalQuestions = questions.length;
-    final numCorrectQuestions = summaryData.where((data) {
-      return data['user_answer'] == data['correct_answer'];
-    }).length;
+    // final numCorrectQuestions = summaryData.where((data) {
+    //   return data['user_answer'] == data['correct_answer'];
+    // }).length;
+    final numCorrectQuestions = summaryData
+        .where(
+          (data) => data['user_answer'] == data['correct_answer'],
+        )
+        .length;
 
     return SizedBox(
       width: double.infinity,
